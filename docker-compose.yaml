@@ -25,10 +25,7 @@ services:
     volumes:
      - '/var/lib/postgresql/data'
     links: ['zoo1']
-    #command: su - postgres -c 'patroni /postgres0.yml' 
-    command : /bin/bash
-    stdin_open: true 
-    tty: true
+    command: su - postgres -c 'patroni /postgres0.yml' 
 
   pg-slave:
     build: '.' 
@@ -41,9 +38,6 @@ services:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
       PGDATA: '/var/lib/postgresql/data/pgdata'
-      REPLICATE_FROM: 'pg-master'
+      #REPLICATE_FROM: 'pg-master'
     links: ['pg-master','zoo1']
-    #command: su - postgres -c 'patroni /postgres1.yml' 
-    command : /bin/bash
-    stdin_open: true 
-    tty: true
+    command: su - postgres -c 'patroni /postgres1.yml' 
