@@ -1,0 +1,13 @@
+FROM postgres:latest
+ENV PG_MAX_WAL_SENDERS 8
+ENV PG_WAL_KEEP_SEGMENTS 8
+RUN echo "deb http://deb.debian.org/debian stretch main" > /etc/apt/sources.list.d/debian.list && \
+    apt-get update -y && \
+    apt-get install -y python3-pip curl
+RUN pip3 install patroni[zookeeper]
+COPY setup-replication.sh /docker-entrypoint-initdb.d/
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY postgres0.yml /postgres0.yml
+COPY postgres1.yml /postgres1.yml
+RUN chmod +x /docker-entrypoint-initdb.d/setup-replication.sh /docker-entrypoint.sh
+CMD ["patroni.py"]
