@@ -3,8 +3,8 @@ scope: batman
 name: postgresql0
 
 restapi:
-  listen: 127.0.0.1:8008
-  connect_address: 127.0.0.1:8008
+  listen: 0.0.0.0:8008
+  connect_address: 0.0.0.0:8008
 #  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
 #  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
 #  authentication:
@@ -12,7 +12,7 @@ restapi:
 #    password: password
 
 zookeeper:
-    hosts: 
+    hosts:
         - zoo1:2181
 
 bootstrap:
