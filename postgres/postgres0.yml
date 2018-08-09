@@ -1,10 +1,10 @@
 scope: batman
 #namespace: /service/
-name: postgresql1
+name: postgresql0
 
 restapi:
-  listen: 127.0.0.1:8008
-  connect_address: 127.0.0.1:8008
+  listen: 0.0.0.0:8008
+  connect_address: 0.0.0.0:8008
 #  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
 #  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
 #  authentication:
@@ -12,9 +12,8 @@ restapi:
 #    password: password
 
 zookeeper:
-  hosts: 
-    - zoo1:2181
-
+    hosts:
+        - zoo1:2181
 
 bootstrap:
   # this section will be written into Etcd:/<namespace>/<scope>/config after initializing new cluster
@@ -24,6 +23,8 @@ bootstrap:
     loop_wait: 10
     retry_timeout: 10
     maximum_lag_on_failover: 1048576
+    master_start_timeout: 300
+    synchronous_mode: true
     postgresql:
       use_pg_rewind: true
       use_slots: true
@@ -63,25 +64,28 @@ bootstrap:
 
 postgresql:
   listen: 0.0.0.0:5432
-  connect_address: pg-slave:5432
-  data_dir: /var/lib/postgresql/data/postgresql1
+  connect_address: pg-master:5432
+  data_dir: /var/lib/postgresql/data/postgresql0
   bin_dir: /usr/lib/postgresql/10/bin
 #  config_dir:
-  pgpass: /tmp/pgpass1
+  pgpass: /tmp/pgpass0
   authentication:
     replication:
       username: replicator
       password: rep-pass
     superuser:
       username: postgres
-      password: zalando
+      password: grespost
   parameters:
     unix_socket_directories: '.'
-  basebackup:
-      - verbose
-      - max-rate: 100M
+
+watchdog:
+  mode: off # Allowed values: off, automatic, required
+#  device: /dev/watchdog
+#  safety_margin: 5
 
 tags:
     nofailover: false
     noloadbalance: false
     clonefrom: false
+    nosync: false
