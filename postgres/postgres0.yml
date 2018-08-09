@@ -75,7 +75,7 @@ postgresql:
       password: rep-pass
     superuser:
       username: postgres
-      password: zalando
+      password: grespost
   parameters:
     unix_socket_directories: '.'
 
